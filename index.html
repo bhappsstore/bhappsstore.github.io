@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BH Apps Store</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Lottie Animation Player -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    
+    <!-- Font Awesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <style>
+        /* Reset & Fonts */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Roboto', sans-serif; background-color: #f4f4f9; color: #333; line-height: 1.6; }
+        
+        /* Header */
+        header {
+            background: linear-gradient(90deg, #EF0479, #FF6B6B);
+            color: #fff;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        header p { font-size: 1.2rem; opacity: 0.9; }
+
+        /* Hero / Animation */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .hero h2 { font-size: 2rem; margin: 20px 0; }
+        .hero p { max-width: 700px; margin: 0 auto 30px; font-size: 1.1rem; }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #EF0479;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        .btn:hover { background: #ff3f70; }
+
+        /* Sections */
+        section { padding: 60px 20px; text-align: center; }
+        section h3 { font-size: 2rem; margin-bottom: 20px; color: #EF0479; }
+        section p { max-width: 800px; margin: 0 auto 30px; }
+
+        /* Social Media Icons */
+        .social-icons {
+            margin-top: 30px;
+        }
+        .social-icons a {
+            color: #EF0479;
+            margin: 0 15px;
+            font-size: 1.5rem;
+            transition: 0.3s;
+        }
+        .social-icons a:hover { color: #FF6B6B; }
+
+        /* Footer */
+        footer {
+            background: #222;
+            color: #fff;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        footer a { color: #EF0479; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        /* Responsive */
+        @media(max-width:768px){
+            header h1 { font-size: 2rem; }
+            .hero h2 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>BH Apps Store</h1>
+        <p>Smart Apps. Simple Life. Android Applications for Everyone.</p>
+    </header>
+
+    <!-- Hero / Lottie Animation -->
+    <div class="hero">
+        <lottie-player 
+            src="https://assets1.lottiefiles.com/packages/lf20_jcikwtux.json" 
+            background="transparent"  
+            speed="1"  
+            style="width: 300px; height: 300px;"  
+            loop  
+            autoplay>
+        </lottie-player>
+        <h2>Welcome to BH Apps Store</h2>
+        <p>We develop high-quality, user-friendly mobile applications that make your life easier and more productive. Explore our apps, privacy policy, and connect with us on social media!</p>
+        <a href="privacy-policy.html" class="btn">View Privacy Policy</a>
+    </div>
+
+    <!-- Features Section -->
+    <section>
+        <h3>Our Features</h3>
+        <p>BH Apps Store provides a wide range of Android applications including utilities, productivity tools, QR Code Scanner & Generator, secure apps, and more. All our apps are optimized for performance and privacy.</p>
+    </section>
+
+    <!-- Social Media Section -->
+    <section>
+        <h3>Connect With Us</h3>
+        <p>Follow us on social media to get the latest updates and announcements about our apps.</p>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/BHAppsStore" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.instagram.com/BHAppsStore" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.twitter.com/BHAppsStore" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.youtube.com/@BHAppsStore" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
+    </section>
+
+    <!-- Developer / Contact Section -->
+    <section>
+        <h3>About the Developer</h3>
+        <p>Developed by <strong>Farabi Walid</strong>, BH Apps Store focuses on delivering quality apps with clean design, smooth performance, and user privacy in mind.</p>
+        <p>Email: <a href="mailto:support@bhappsstore.com">support@bhappsstore.com</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 BH Apps Store. All rights reserved.  
+        <br>
+        <a href="privacy-policy.html">Privacy Policy</a>
+    </footer>
+
+</body>
+</html>
