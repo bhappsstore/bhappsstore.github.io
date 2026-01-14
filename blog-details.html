@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BH Apps Store - Blog Details</title>
+<meta name="description" content="BH Apps Store - আধুনিক, নিরাপদ ও ফিউচার-রেডি মোবাইল অ্যাপ্লিকেশন">
+<meta name="p:domain_verify" content="842236a1c749a576d8377a05af2989a3"/>
+<!-- Google Site Verification -->
+<meta name="google-site-verification" content="sLn6NtFMbKt0LIORzRaA_2C_LYxdLzvF0uU7DyiBQ3U" />
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+<style>
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #0a0e27, #1a1d3a, #2d1b4e);
+    color: #fff;
+    overflow-x: hidden;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 20px;
+}
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(10, 14, 39, .95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, .1);
+    box-shadow: 0 5px 30px rgba(0, 0, 0, .3);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.logo {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    cursor: pointer;
+    transition: transform .3s;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.logo-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #EF0479, #FFD93D);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.3rem;
+    box-shadow: 0 5px 20px rgba(239, 4, 121, .4);
+}
+
+.logo h3 {
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, #EF0479, #FFD93D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-links {
+    display: flex;
+    gap: 35px;
+    list-style: none;
+    align-items: center;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+    font-weight: 500;
+    transition: color .3s;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #FFD93D;
+    transition: width .3s;
+}
+
+.nav-links a:hover {
+    color: #FFD93D;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    width: 30px;
+    height: 3px;
+    background: #FFD93D;
+    border-radius: 3px;
+    transition: all .3s;
+}
+
+/* Blog Details Hero */
+.blog-hero {
+    padding: 100px 20px 60px;
+    text-align: center;
+    background: rgba(0, 0, 0, .3);
+    margin-bottom: 50px;
+}
+
+.blog-hero h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #EF0479, #FFD93D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.blog-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.blog-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #EF0479, #FFD93D);
+}
+
+.blog-date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+}
+
+/* Blog Content */
+.blog-content-wrapper {
+    padding: 0 20px 100px;
+}
+
+.blog-content {
+    background: rgba(255, 255, 255, .05);
+    border-radius: 25px;
+    padding: 50px;
+    border: 1px solid rgba(255, 255, 255, .1);
+    margin-bottom: 50px;
+}
+
+.blog-image {
+    width: 100%;
+    height: 400px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.blog-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.blog-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+.blog-text h2 {
+    font-size: 2rem;
+    margin: 40px 0 20px;
+    color: #FFD93D;
+}
+
+.blog-text h3 {
+    font-size: 1.5rem;
+    margin: 30px 0 15px;
+    color: #EF0479;
+}
+
+.blog-text p {
+    margin-bottom: 20px;
+    opacity: .9;
+}
+
+.blog-text ul, .blog-text ol {
+    margin: 20px 0;
+    padding-left: 30px;
+}
+
+.blog-text li {
+    margin-bottom: 10px;
+    opacity: .9;
+}
+
+.blog-text blockquote {
+    border-left: 4px solid #EF0479;
+    padding-left: 20px;
+    margin: 30px 0;
+    font-style: italic;
+    opacity: .8;
+    font-size: 1.2rem;
+}
+
+.code-block {
+    background: rgba(0, 0, 0, .5);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    border: 1px solid rgba(255, 255, 255, .1);
+}
+
+/* Related Posts */
+.related-posts {
+    padding: 60px 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.section-title h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #EF0479, #FFD93D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.section-title p {
+    font-size: 1.2rem;
+    opacity: .8;
+    max-width: 600px;
+    margin: auto;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+}
+
+.related-card {
+    background: rgba(255, 255, 255, .05);
+    border-radius: 25px;
+    overflow: hidden;
+    transition: all .4s;
+    border: 1px solid rgba(255, 255, 255, .1);
+}
+
+.related-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(239, 4, 121, .3);
+}
+
+.related-image {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+.related-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.related-content {
+    padding: 25px;
+}
+
+.related-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.related-content p {
+    opacity: .8;
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.read-more {
+    color: #FFD93D;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all .3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.read-more:hover {
+    transform: translateX(5px);
+}
+
+/* Back Button */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 25px;
+    background: rgba(255, 255, 255, .05);
+    border: 1px solid rgba(255, 255, 255, .1);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all .3s;
+    margin-top: 30px;
+}
+
+.back-btn:hover {
+    background: rgba(255, 255, 255, .1);
+    transform: translateX(-5px);
+}
+
+/* Footer Styling */
+footer {
+    background: rgba(0, 0, 0, .7);
+    padding: 80px 20px 20px;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    margin-top: auto;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-section h4 {
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+    color: #FFD93D;
+}
+
+.footer-section p {
+    opacity: .8;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: #fff;
+    text-decoration: none;
+    opacity: .8;
+    transition: all .3s;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+    color: #FFD93D;
+    transform: translateX(5px);
+}
+
+.social-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.social-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    transition: all .3s;
+    border: 1px solid rgba(255, 255, 255, .1);
+}
+
+.social-link:hover {
+    background: linear-gradient(135deg, #EF0479, #FFD93D);
+    transform: translateY(-3px);
+    border-color: transparent;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, .1);
+    opacity: .7;
+}
+
+.footer-bottom p {
+    margin-bottom: 10px;
+}
+
+.footer-bottom a {
+    color: #FFD93D;
+    text-decoration: none;
+    transition: opacity .3s;
+}
+
+.footer-bottom a:hover {
+    opacity: .8;
+}
+
+.scroll-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #EF0479, #FFD93D);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .4s;
+    z-index: 999;
+    box-shadow: 0 5px 20px rgba(239, 4, 121, .5);
+}
+
+.scroll-top.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.scroll-top:hover {
+    transform: translateY(-5px);
+}
+
+@media (max-width: 1024px) {
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        flex-direction: column;
+        background: rgba(10, 14, 39, .98);
+        padding: 30px;
+        border-radius: 20px;
+        display: none;
+        box-shadow: 0 10px 50px rgba(0, 0, 0, .5);
+        backdrop-filter: blur(20px);
+    }
+    .nav-links.active {
+        display: flex;
+    }
+    .menu-toggle {
+        display: flex;
+    }
+    .blog-hero h1 {
+        font-size: 2rem;
+    }
+    .blog-content {
+        padding: 30px;
+    }
+    .blog-image {
+        height: 250px;
+    }
+    .related-grid {
+        grid-template-columns: 1fr;
+    }
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-hero h1 {
+        font-size: 1.8rem;
+    }
+    .blog-meta {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .blog-content {
+        padding: 20px;
+    }
+    .section-title h2 {
+        font-size: 2rem;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="nav-container">
+<div class="logo" onclick="window.location.href='index.html'">
+<div class="logo-icon">BH</div>
+<h3>BH Apps Store</h3>
+</div>
+<ul class="nav-links">
+<li><a href="index.html">হোম</a></li>
+<li><a href="index.html#features">ফিচার</a></li>
+<li><a href="index.html#apps">অ্যাপস</a></li>
+<li><a href="index.html#blog">ব্লগ</a></li>
+<li><a href="index.html#contact">যোগাযোগ</a></li>
+</ul>
+<div class="menu-toggle"><span></span><span></span><span></span></div>
+</div>
+</header>
+
+<section class="blog-hero">
+<div class="container">
+<h1 id="blogTitle">অ্যান্ড্রয়েড অ্যাপ ডেভেলপমেন্ট টিপস</h1>
+<div class="blog-meta">
+<div class="blog-author">
+<div class="author-avatar"></div>
+<span id="blogAuthor">Farabi Walid</span>
+</div>
+<div class="blog-date">
+<i class="far fa-calendar"></i>
+<span id="blogDate">১৫ জানুয়ারি ২০২৬</span>
+</div>
+</div>
+<a href="index.html#blog" class="back-btn">
+<i class="fas fa-arrow-left"></i> সব ব্লগ দেখুন
+</a>
+</div>
+</section>
+
+<section class="blog-content-wrapper">
+<div class="container">
+<div class="blog-content">
+<div class="blog-image">
+<img id="blogImage" src="" alt="Blog Image">
+</div>
+<div class="blog-text" id="blogContent">
+<!-- Dynamic content will be loaded here -->
+</div>
+</div>
+
+<div class="related-posts">
+<div class="section-title">
+<h2>সম্পর্কিত ব্লগ</h2>
+<p>আরও পড়ুন আমাদের অন্যান্য ব্লগ পোস্ট</p>
+</div>
+<div class="related-grid">
+<div class="related-card">
+<div class="related-image" style="background:linear-gradient(135deg,#f093fb,#f5576c)"></div>
+<div class="related-content">
+<h3>নতুন ফিচার আপডেট ২০২৬</h3>
+<p>আমাদের সব অ্যাপে যুক্ত হয়েছে নতুন ফিচার। জানুন কি কি নতুন সুবিধা পাবেন আপনি।</p>
+<a href="blog-details.html?blog=2" class="read-more">আরও পড়ুন <i class="fas fa-arrow-right"></i></a>
+</div>
+</div>
+
+<div class="related-card">
+<div class="related-image" style="background:linear-gradient(135deg,#4facfe,#00f2fe)"></div>
+<div class="related-content">
+<h3>মোবাইল সিকিউরিটি গাইড</h3>
+<p>আপনার মোবাইল ডিভাইস নিরাপদ রাখার সম্পূর্ণ গাইড। জানুন সেরা সিকিউরিটি প্র্যাকটিস।</p>
+<a href="blog-details.html?blog=3" class="read-more">আরও পড়ুন <i class="fas fa-arrow-right"></i></a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="container">
+<div class="footer-content">
+<div class="footer-section">
+<h4>BH Apps Store</h4>
+<p>আধুনিক, নিরাপদ এবং ফিউচার-রেডি মোবাইল অ্যাপ্লিকেশন তৈরি করি। আপনার ডিজিটাল জীবনকে সহজ করতে প্রতিশ্রুতিবদ্ধ।</p>
+</div>
+
+<div class="footer-section">
+<h4>দ্রুত লিঙ্ক</h4>
+<ul class="footer-links">
+<li><a href="index.html"><i class="fas fa-chevron-right"></i> হোম</a></li>
+<li><a href="index.html#features"><i class="fas fa-chevron-right"></i> ফিচার</a></li>
+<li><a href="index.html#apps"><i class="fas fa-chevron-right"></i> অ্যাপস</a></li>
+<li><a href="index.html#blog"><i class="fas fa-chevron-right"></i> ব্লগ</a></li>
+<li><a href="index.html#contact"><i class="fas fa-chevron-right"></i> যোগাযোগ</a></li>
+</ul>
+</div>
+
+<div class="footer-section">
+<h4>সাপোর্ট</h4>
+<ul class="footer-links">
+<li><a href="#"><i class="fas fa-chevron-right"></i> সাহায্য কেন্দ্র</a></li>
+<li><a href="#"><i class="fas fa-chevron-right"></i> FAQ</a></li>
+<li><a href="#"><i class="fas fa-chevron-right"></i> রিপোর্ট করুন</a></li>
+<li><a href="#"><i class="fas fa-chevron-right"></i> ডেভেলপার গাইড</a></li>
+<li><a href="#"><i class="fas fa-chevron-right"></i> API ডকুমেন্টেশন</a></li>
+</ul>
+</div>
+
+<div class="footer-section">
+<h4>আইনি</h4>
+<ul class="footer-links">
+<li><a href="privacy-policy.html"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+<li><a href="terms.html"><i class="fas fa-chevron-right"></i> Terms & Conditions</a></li>
+<li><a href="#"><i class="fas fa-chevron-right"></i> Refund Policy</a></li>
+<li><a href="#"><i class="fas fa-chevron-right"></i> Cookie Policy</a></li>
+<li><a href="#"><i class="fas fa-chevron-right"></i> DMCA</a></li>
+</ul>
+</div>
+</div>
+
+<div class="footer-bottom">
+<p>© 2026 BH Apps Store. All Rights Reserved.</p>
+<p>Developed with ❤️ by <strong>Farabi Walid</strong></p>
+<p>
+<a href="privacy-policy.html">Privacy Policy</a> | 
+<a href="terms.html">Terms & Conditions</a> | 
+<a href="#">Sitemap</a>
+</p>
+</div>
+</div>
+</footer>
+
+<div class="scroll-top"><i class="fas fa-arrow-up"></i></div>
+
+<script>
+// Toggle mobile menu
+const toggle = document.querySelector('.menu-toggle');
+const nav = document.querySelector('.nav-links');
+toggle.onclick = () => nav.classList.toggle('active');
+
+// Scroll to top button
+const scrollBtn = document.querySelector('.scroll-top');
+window.addEventListener('scroll', () => {
+    scrollBtn.classList.toggle('active', window.scrollY > 300);
+});
+scrollBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+// Blog data
+const blogs = {
+    1: {
+        title: "অ্যান্ড্রয়েড অ্যাপ ডেভেলপমেন্ট টিপস",
+        date: "১৫ জানুয়ারি ২০২৬",
+        author: "Farabi Walid",
+        image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+        content: `
+            <h2>আধুনিক অ্যান্ড্রয়েড অ্যাপ ডেভেলপমেন্ট</h2>
+            <p>আধুনিক অ্যান্ড্রয়েড অ্যাপ তৈরির জন্য কিছু সেরা প্র্যাকটিস এবং টিপস নিয়ে আজকের এই ব্লগ পোস্ট।</p>
+            
+            <h3>১. পারফরম্যান্স অপ্টিমাইজেশন</h3>
+            <p>অ্যাপের পারফরম্যান্স উন্নত করতে নিচের বিষয়গুলো মাথায় রাখুন:</p>
+            <ul>
+                <li>মেমরি লিক এড়িয়ে চলুন</li>
+                <li>ব্যাকগ্রাউন্ড টাস্ক সীমিত রাখুন</li>
+                <li>ইমেজ অপ্টিমাইজেশন ব্যবহার করুন</li>
+                <li>কোড প্রোফাইলিং রেগুলার করুন</li>
+            </ul>
+            
+            <h3>২. ইউজার ইন্টারফেস ডিজাইন</h3>
+            <p>Material Design গাইডলাইন ফলো করুন এবং ইউজার এক্সপেরিয়েন্সকে প্রাধান্য দিন।</p>
+            
+            <h3>৩. সিকিউরিটি বেস্ট প্র্যাকটিস</h3>
+            <p>আপনার অ্যাপ নিরাপদ রাখতে:</p>
+            <div class="code-block">
+// Example: Secure data storage
+val sharedPref = getSharedPreferences("myapp", Context.MODE_PRIVATE)
+with (sharedPref.edit()) {
+    putString("api_key", encrypt(apiKey))
+    apply()
+}
+            </div>
+            
+            <blockquote>
+                "একটি ভালো অ্যাপ শুধু কাজই করে না, বরং ইউজারের সমস্যা সমাধান করে সহজ ও আনন্দদায়ক উপায়ে।"
+            </blockquote>
+            
+            <h3>৪. টেস্টিং এবং ডিবাগিং</h3>
+            <p>রেগুলার টেস্টিং এবং কন্টিনিউয়াস ইন্টিগ্রেশন সেটআপ করুন।</p>
+            
+            <h3>৫. পাবলিশিং টিপস</h3>
+            <p>Play Store-এ পাবলিশ করার আগে:</p>
+            <ol>
+                <li>APK সাইজ চেক করুন</li>
+                <li>স্ক্রিনশট প্রস্তুত করুন</li>
+                <li>ডেসক্রিপশন লিখুন</li>
+                <li>কিওয়ার্ড রিসার্চ করুন</li>
+            </ol>
+            
+            <p>এই টিপসগুলো ফলো করলে আপনার অ্যান্ড্রয়েড অ্যাপ ডেভেলপমেন্ট জার্নি অনেক smoother হবে।</p>
+        `
+    },
+    2: {
+        title: "নতুন ফিচার আপডেট ২০২৬",
+        date: "১০ জানুয়ারি ২০২৬",
+        author: "BH Team",
+        image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+        content: `
+            <h2>২০২৬ সালের নতুন ফিচার আপডেট</h2>
+            <p>আমাদের সব অ্যাপে যুক্ত হয়েছে এক্সাইটিং নতুন ফিচারগুলো। জানুন কি কি নতুন সুবিধা পাবেন আপনি।</p>
+            
+            <h3>AI-পাওয়ার্ড সাজেশন</h3>
+            <p>এখন আমাদের অ্যাপগুলোতে AI-based সাজেশন সিস্টেম যুক্ত হয়েছে যা আপনার ব্যবহার অনুযায়ী পার্সোনালাইজড সাজেশন দেবে।</p>
+            
+            <h3>রিয়েল-টাইম সিঙ্ক</h3>
+            <p>সকল ডিভাইসে রিয়েল-টাইম ডেটা সিঙ্ক সুবিধা যোগ করা হয়েছে।</p>
+            
+            <h3>অফলাইন এক্সেস</h3>
+            <p>ইন্টারনেট ছাড়াই অ্যাপ ব্যবহারের সুবিধা যোগ করা হয়েছে।</p>
+            
+            <h3>সিকিউরিটি এনহ্যান্সমেন্ট</h3>
+            <p>এন্ড-টু-এন্ড এনক্রিপশন এবং বায়োমেট্রিক লগিন সাপোর্ট যোগ করা হয়েছে।</p>
+        `
+    },
+    3: {
+        title: "মোবাইল সিকিউরিটি গাইড",
+        date: "৫ জানুয়ারি ২০২৬",
+        author: "Security Team",
+        image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+        content: `
+            <h2>মোবাইল সিকিউরিটি সম্পূর্ণ গাইড</h2>
+            <p>আপনার মোবাইল ডিভাইস নিরাপদ রাখার সম্পূর্ণ গাইড। জানুন সেরা সিকিউরিটি প্র্যাকটিস।</p>
+            
+            <h3>১. অ্যাপ পারমিশন</h3>
+            <p>অপ্রয়োজনীয় অ্যাপ পারমিশন দেবেন না। শুধু প্রয়োজনীয় পারমিশন দিন।</p>
+            
+            <h3>২. অ্যাপ আপডেট</h3>
+            <p>নিয়মিত অ্যাপ আপডেট করুন। সিকিউরিটি প্যাচগুলোর জন্য এটি খুবই গুরুত্বপূর্ণ।</p>
+            
+            <h3>৩. পাবলিক Wi-Fi</h3>
+            <p>পাবলিক Wi-Fi ব্যবহারের সময় VPN ব্যবহার করুন এবং সেনসিটিভ ডেটা এড়িয়ে চলুন।</p>
+            
+            <h3>৪. পাসওয়ার্ড ম্যানেজমেন্ট</h3>
+            <p>শক্তিশালী ও ইউনিক পাসওয়ার্ড ব্যবহার করুন এবং পাসওয়ার্ড ম্যানেজার ব্যবহার করুন।</p>
+            
+            <h3>৫. টু-ফ্যাক্টর অথেনটিকেশন</h3>
+            <p>সম্ভব হলে সব অ্যাকাউন্টে টু-ফ্যাক্টর অথেনটিকেশন ইনেবল করুন।</p>
+        `
+    }
+};
+
+// Load blog content based on URL parameter
+function loadBlogContent() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const blogId = urlParams.get('blog') || '1';
+    
+    const blog = blogs[blogId];
+    
+    if (blog) {
+        // Update page title
+        document.title = `${blog.title} - BH Apps Store`;
+        
+        // Update blog content
+        document.getElementById('blogTitle').textContent = blog.title;
+        document.getElementById('blogDate').textContent = blog.date;
+        document.getElementById('blogAuthor').textContent = blog.author;
+        document.getElementById('blogImage').src = blog.image;
+        document.getElementById('blogImage').alt = blog.title;
+        document.getElementById('blogContent').innerHTML = blog.content;
+        
+        // Update related posts based on current blog
+        updateRelatedPosts(blogId);
+    }
+}
+
+// Update related posts
+function updateRelatedPosts(currentBlogId) {
+    const relatedPosts = document.querySelectorAll('.related-card a');
+    relatedPosts.forEach((link, index) => {
+        let blogNum = (parseInt(currentBlogId) + index) % 3 + 1;
+        if (blogNum == currentBlogId) blogNum = blogNum % 3 + 1;
+        link.href = `blog-details.html?blog=${blogNum}`;
+    });
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    loadBlogContent();
+    
+    // Close mobile menu when clicking a link
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            nav.classList.remove('active');
+        });
+    });
+});
+</script>
+
+</body>
+</html>
