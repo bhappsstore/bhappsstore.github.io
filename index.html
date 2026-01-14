@@ -1314,7 +1314,7 @@ footer {
 <div class="author-avatar"></div>
 <span>Farabi Walid</span>
 </div>
-<a href="#" class="read-more">আরও পড়ুন <i class="fas fa-arrow-right"></i></a>
+<a href="blog-details.html?blog=1" class="read-more">আরও পড়ুন <i class="fas fa-arrow-right"></i></a>
 </div>
 </div>
 </div>
@@ -1331,7 +1331,7 @@ footer {
 <div class="author-avatar"></div>
 <span>BH Team</span>
 </div>
-<a href="#" class="read-more">আরও পড়ুন <i class="fas fa-arrow-right"></i></a>
+<a href="blog-details.html?blog=2" class="read-more">আরও পড়ুন <i class="fas fa-arrow-right"></i></a>
 </div>
 </div>
 </div>
@@ -1348,7 +1348,7 @@ footer {
 <div class="author-avatar"></div>
 <span>Security Team</span>
 </div>
-<a href="#" class="read-more">আরও পড়ুন <i class="fas fa-arrow-right"></i></a>
+<a href="blog-details.html?blog=3" class="read-more">আরও পড়ুন <i class="fas fa-arrow-right"></i></a>
 </div>
 </div>
 </div>
@@ -1736,6 +1736,16 @@ if (contactForm) {
         contactForm.reset();
     });
 }
+
+    // ✅ নতুন যোগ করা: Blog card click event
+document.querySelectorAll('.blog-card').forEach((card, index) => {
+    card.addEventListener('click', function(e) {
+        if (!e.target.closest('.read-more')) {
+            window.location.href = `blog-details.html?blog=${index + 1}`;
+        }
+    });
+});
+
 </script>
 
 </body>
