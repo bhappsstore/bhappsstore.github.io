@@ -793,6 +793,32 @@ textarea.form-control {
     min-height: 120px;
 }
 
+/* Notification Toast */
+.notification-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transform: translateX(150%);
+    transition: transform 0.5s ease-in-out;
+}
+
+.notification-toast.show {
+    transform: translateX(0);
+}
+
+.notification-toast.error {
+    background: linear-gradient(135deg, #f44336, #d32f2f);
+}
+
 /* UPDATED FOOTER STYLING */
 footer {
     background: rgba(0, 0, 0, .7);
@@ -1387,9 +1413,9 @@ footer {
 <div class="newsletter-box reveal">
 <h2>নিউজলেটার সাবস্ক্রাইব করুন</h2>
 <p>নতুন অ্যাপ লঞ্চ, আপডেট এবং অফার সম্পর্কে প্রথম জানুন</p>
-<!-- UPDATED: Newsletter form with mailto action -->
-<form class="newsletter-form" action="mailto:bhappsstore@gmail.com" method="post" enctype="text/plain">
-<input type="email" name="Subscriber Email" class="newsletter-input" placeholder="আপনার ইমেইল ঠিকানা" required>
+<!-- UPDATED: Newsletter form with JavaScript -->
+<form class="newsletter-form" id="newsletterForm">
+<input type="email" id="newsletterEmail" class="newsletter-input" placeholder="আপনার ইমেইল ঠিকানা" required>
 <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> সাবস্ক্রাইব</button>
 </form>
 </div>
@@ -1428,24 +1454,24 @@ footer {
 </div>
 </div>
 
-<!-- UPDATED: Contact form with mailto action -->
+<!-- UPDATED: Contact form with JavaScript -->
 <div class="contact-form reveal">
-<form action="mailto:bhappsstore@gmail.com" method="post" enctype="text/plain">
+<form id="contactForm">
 <div class="form-group">
 <label>আপনার নাম</label>
-<input type="text" name="Name" class="form-control" placeholder="নাম লিখুন" required>
+<input type="text" id="contactName" class="form-control" placeholder="নাম লিখুন" required>
 </div>
 <div class="form-group">
 <label>ইমেইল</label>
-<input type="email" name="Email" class="form-control" placeholder="ইমেইল লিখুন" required>
+<input type="email" id="contactEmail" class="form-control" placeholder="ইমেইল লিখুন" required>
 </div>
 <div class="form-group">
 <label>বিষয়</label>
-<input type="text" name="Subject" class="form-control" placeholder="বিষয় লিখুন" required>
+<input type="text" id="contactSubject" class="form-control" placeholder="বিষয় লিখুন" required>
 </div>
 <div class="form-group">
 <label>মেসেজ</label>
-<textarea name="Message" class="form-control" placeholder="আপনার মেসেজ লিখুন" required></textarea>
+<textarea id="contactMessage" class="form-control" placeholder="আপনার মেসেজ লিখুন" required></textarea>
 </div>
 <button type="submit" class="btn"><i class="fas fa-paper-plane"></i> মেসেজ পাঠান</button>
 </form>
@@ -1541,6 +1567,12 @@ footer {
 </div>
 </footer>
 
+<!-- Notification Toast -->
+<div class="notification-toast" id="notificationToast">
+<i class="fas fa-check-circle"></i>
+<span id="toastMessage">সফলভাবে সংরক্ষিত হয়েছে!</span>
+</div>
+
 <div class="scroll-top"><i class="fas fa-arrow-up"></i></div>
 
 <script>
@@ -1590,7 +1622,100 @@ filterBtns.forEach(btn => {
     });
 });
 
-// Removed JavaScript form submission to allow mailto to work properly
+// Notification Toast Function
+function showNotification(message, isError = false) {
+    const toast = document.getElementById('notificationToast');
+    const toastMessage = document.getElementById('toastMessage');
+    
+    toastMessage.textContent = message;
+    
+    if (isError) {
+        toast.classList.add('error');
+    } else {
+        toast.classList.remove('error');
+    }
+    
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// Newsletter Form Handler
+const newsletterForm = document.getElementById('newsletterForm');
+if (newsletterForm) {
+    newsletterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('newsletterEmail').value;
+        
+        if (!email) {
+            showNotification('দয়া করে ইমেইল ঠিকানা লিখুন', true);
+            return;
+        }
+        
+        // Validate email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showNotification('দয়া করে সঠিক ইমেইল ঠিকানা লিখুন', true);
+            return;
+        }
+        
+        // Create mailto URL
+        const subject = "Newsletter Subscription Request";
+        const body = `Hello BH Apps Store,\n\nI would like to subscribe to your newsletter.\n\nMy email: ${email}\n\nThank you!`;
+        const mailtoUrl = `mailto:bhappsstore@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        
+        // Open email client
+        window.open(mailtoUrl, '_blank');
+        
+        // Show success notification
+        showNotification('ধন্যবাদ! সাবস্ক্রিপশন রিকোয়েস্ট পাঠানো হয়েছে');
+        
+        // Reset form
+        newsletterForm.reset();
+    });
+}
+
+// Contact Form Handler
+const contactForm = document.getElementById('contactForm');
+if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('contactName').value;
+        const email = document.getElementById('contactEmail').value;
+        const subject = document.getElementById('contactSubject').value;
+        const message = document.getElementById('contactMessage').value;
+        
+        // Validation
+        if (!name || !email || !subject || !message) {
+            showNotification('দয়া করে সবগুলো তথ্য পূরণ করুন', true);
+            return;
+        }
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            showNotification('দয়া করে সঠিক ইমেইল ঠিকানা লিখুন', true);
+            return;
+        }
+        
+        // Create mailto URL
+        const emailSubject = `Contact Form: ${subject}`;
+        const emailBody = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\n\nMessage:\n${message}\n\n---\nThis message was sent from BH Apps Store website.`;
+        const mailtoUrl = `mailto:bhappsstore@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+        
+        // Open email client
+        window.open(mailtoUrl, '_blank');
+        
+        // Show success notification
+        showNotification('ধন্যবাদ! আপনার মেসেজ ইমেইল ক্লায়েন্টে প্রস্তুত');
+        
+        // Reset form
+        contactForm.reset();
+    });
+}
 </script>
 
 </body>
