@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy Policy | QuizzerX</title>
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E55A2B;
+            --secondary: #FFB347;
+            --dark-bg: #0A0A0A;
+            --dark-surface: #141414;
+            --dark-card: #1E1E1E;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B0B0B0;
+            --text-muted: #888888;
+            --border-color: #2A2A2A;
+            --radius: 12px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.7;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            background: var(--dark-surface);
+            border-radius: var(--radius);
+            padding: 40px 35px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 30px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+
+        .app-icon {
+            width: 72px;
+            height: 72px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 14px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header .subtitle {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .header .badge {
+            display: inline-block;
+            background: var(--primary);
+            color: #fff;
+            font-size: 12px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 28px 0 12px 0;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2 .emoji {
+            font-size: 22px;
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 600;
+            margin: 18px 0 8px 0;
+            color: var(--text-primary);
+        }
+
+        p, li {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        ul, ol {
+            padding-left: 24px;
+            margin-bottom: 12px;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        .highlight-box {
+            background: var(--dark-card);
+            border-left: 4px solid var(--primary);
+            padding: 14px 18px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 16px 0;
+        }
+
+        .highlight-box p {
+            margin-bottom: 0;
+            color: var(--text-secondary);
+        }
+
+        .highlight-box strong {
+            color: var(--text-primary);
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin: 16px 0;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background: var(--dark-card);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        td {
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 16px;
+            margin: 12px 0 16px 0;
+        }
+
+        .feature-grid .item {
+            color: var(--text-secondary);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-grid .item::before {
+            content: "✅";
+            font-size: 14px;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 2px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .footer .brand {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 16px;
+            }
+            .header h1 {
+                font-size: 22px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            .table-wrap table {
+                font-size: 13px;
+            }
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <div class="app-icon">Q</div>
+        <h1>🔒 Privacy Policy</h1>
+        <div class="subtitle">QuizzerX – Your Privacy is Our Priority</div>
+        <div class="badge">📌 Last Updated: August 04, 2026</div>
+    </div>
+
+    <!-- 1. Introduction -->
+    <h2><span class="emoji">📌</span> 1. Introduction</h2>
+    <p>
+        <strong>QuizzerX</strong> (“we”, “our”, “app”) is an educational quiz application designed to help users test and improve their knowledge across various categories. Protecting your privacy is our highest priority. This Privacy Policy explains how we collect, use, and safeguard your information. By using this app, you agree to the terms outlined in this policy.
+    </p>
+
+    <!-- 2. Information Collection -->
+    <h2><span class="emoji">📊</span> 2. What Information We Collect</h2>
+
+    <h3>2.1 Information You Provide Directly</h3>
+    <ul>
+        <li><strong>Profile Information</strong> — If you choose to create a profile, we collect your name and profile picture (optional).</li>
+        <li><strong>Quiz Answers</strong> — Your answers to quiz questions are stored to track your scores and progress.</li>
+        <li><strong>Feedback</strong> — Any feedback or responses you send to us.</li>
+    </ul>
+
+    <h3>2.2 Automatically Collected Information</h3>
+    <ul>
+        <li><strong>Device Information</strong> — Model, OS version, unique device ID (Firebase Installation ID).</li>
+        <li><strong>App Usage Data</strong> — Which categories are played most, scores, number of quizzes completed, crash reports.</li>
+        <li><strong>IP Address</strong> — Approximate location and security purposes.</li>
+    </ul>
+
+    <h3>2.3 Firebase & App Data</h3>
+    <ul>
+        <li><strong>Scores & History</strong> — Your quiz scores, number of quizzes completed, and points earned.</li>
+        <li><strong>Achievements & Badges</strong> — The achievements you have unlocked.</li>
+        <li><strong>Streak Information</strong> — How many consecutive days you have used the app.</li>
+        <li><strong>Settings Preferences</strong> — Sound, timer, dark mode, and other preferences.</li>
+    </ul>
+
+    <!-- 3. How We Use Your Information -->
+    <h2><span class="emoji">🎯</span> 3. Why We Use Your Information</h2>
+    <div class="feature-grid">
+        <div class="item">To track your quiz progress and scores</div>
+        <div class="item">To provide customized quiz experiences</div>
+        <div class="item">To unlock achievements and badges</div>
+        <div class="item">To improve app performance and security</div>
+        <div class="item">To respond to your questions or complaints</div>
+        <div class="item">To send necessary notifications (if enabled)</div>
+        <div class="item">To prevent fraud and misuse</div>
+    </div>
+
+    <!-- 4. Information Sharing -->
+    <h2><span class="emoji">🤝</span> 4. Information Sharing (Who We Share With)</h2>
+    <p>
+        We never sell or transfer your personal information to third parties for commercial purposes. However, information may be shared in the following cases:
+    </p>
+    <ul>
+        <li><strong>Legal Requirements</strong>: Court orders, valid requests from law enforcement agencies.</li>
+        <li><strong>Service Providers</strong>: Firebase, Google AdMob, Google Analytics — which have their own privacy policies.</li>
+        <li><strong>With Your Consent</strong>: If you choose to participate in any special features.</li>
+    </ul>
+
+    <h3>Third-Party Services</h3>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr><th>Service</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Google Firebase</strong></td><td>Database, Authentication, Analytics</td></tr>
+                <tr><td><strong>Google AdMob</strong></td><td>Banner & Interstitial Advertising</td></tr>
+                <tr><td><strong>Google Analytics for Firebase</strong></td><td>App Usage Analysis</td></tr>
+                <tr><td><strong>Google Play Billing</strong></td><td>Premium Subscription Management</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 5. Data Security -->
+    <h2><span class="emoji">🛡️</span> 5. Data Security</h2>
+    <p>We implement the following measures to protect your information:</p>
+    <ul>
+        <li><strong>🔐 Encryption</strong>: Sensitive information is stored in encrypted format.</li>
+        <li><strong>🔐 Firebase Security Rules</strong>: Strict access controls.</li>
+        <li><strong>🔐 Offline Storage</strong>: Your scores and settings are stored locally on your device (Room Database).</li>
+        <li><strong>🔐 Regular Audits & Updates</strong>: Regular reviews to minimize security risks.</li>
+    </ul>
+    <div class="highlight-box">
+        <p>⚠️ Please note that 100% security over the internet cannot be guaranteed. We continuously strive to maintain the highest level of protection.</p>
+    </div>
+
+    <!-- 6. Children's Privacy -->
+    <h2><span class="emoji">👶</span> 6. Children's Privacy</h2>
+    <p>
+        Our app is not intended for children under 13 years of age. We do not knowingly collect personal information from children. If a parent or guardian informs us that their child has provided us with information, we will delete it promptly.
+    </p>
+
+    <!-- 7. Your Rights -->
+    <h2><span class="emoji">📱</span> 7. Your Rights</h2>
+    <p>You have the following rights at any time:</p>
+    <div class="feature-grid">
+        <div class="item">Right to access and copy your data</div>
+        <div class="item">Right to change your preferences in app settings</div>
+        <div class="item">Right to delete all local data by uninstalling the app</div>
+        <div class="item">Right to disable notifications</div>
+        <div class="item">Right to withdraw consent</div>
+    </div>
+    <div class="highlight-box">
+        <p><strong>If you uninstall the app:</strong> All scores, settings, and progress data stored on your device will be deleted. Data stored in Firebase (such as analytics) may remain in an anonymous form.</p>
+    </div>
+
+    <!-- 8. Data Retention -->
+    <h2><span class="emoji">💾</span> 8. Data Retention</h2>
+    <p>
+        Your information is retained as long as the app is installed on your device. When you uninstall the app, all device data is removed. Firebase analytics data may be retained anonymously for up to 2 years.
+    </p>
+
+    <!-- 9. Notifications -->
+    <h2><span class="emoji">🔔</span> 9. Notifications</h2>
+    <p>We use FCM (Firebase Cloud Messaging) to send notifications (if you grant permission):</p>
+    <ul>
+        <li>📢 Daily Challenge Reminders</li>
+        <li>📢 Streak Reminders (if feature is active)</li>
+        <li>📢 App Updates & Important Announcements</li>
+    </ul>
+    <p>You can disable all notifications from the Settings menu.</p>
+
+    <!-- 10. Advertising -->
+    <h2><span class="emoji">📢</span> 10. Advertising (Google AdMob)</h2>
+    <p>
+        We display AdMob ads to keep the app free. AdMob may show personalized ads based on your app activity and device information. If you do not want personalized ads, you can opt out through your device's Google Ad Settings (Android: Settings → Google → Ads → Opt out of Ads Personalization).
+    </p>
+    <div class="highlight-box">
+        <p><strong>With a Premium Subscription</strong>, ads will not be displayed.</p>
+    </div>
+
+    <!-- 11. Contact -->
+    <h2><span class="emoji">📧</span> 11. Contact & Complaints</h2>
+    <p>For any privacy-related questions or complaints, please contact us:</p>
+    <ul>
+        <li><strong>Email</strong>: bhappsstore@gmail.com</li>
+        <li><strong>Website</strong>: <a href="https://bhappsstore.github.io/" target="_blank">https://bhappsstore.github.io/</a> (BH Apps Store)</li>
+        <li><strong>Developer</strong>: Farabi Walid</li>
+    </ul>
+
+    <!-- 12. Changes to This Policy -->
+    <h2><span class="emoji">🔄</span> 12. Changes to This Policy</h2>
+    <p>
+        We may update this Privacy Policy from time to time. For significant changes, we will notify you via app notification or email. The latest version will always be published on this page.
+    </p>
+
+    <!-- App Information -->
+    <h2 style="margin-top: 40px;"><span class="emoji">📱</span> App Information</h2>
+    <div class="table-wrap">
+        <table>
+            <tbody>
+                <tr><td><strong>📱 App Name</strong></td><td>QuizzerX</td></tr>
+                <tr><td><strong>📦 Package Name</strong></td><td>com.bhappsstore.quizzerx</td></tr>
+                <tr><td><strong>👨💻 Developer</strong></td><td>Farabi Walid</td></tr>
+                <tr><td><strong>🏢 Offered by</strong></td><td>BH Apps Store</td></tr>
+                <tr><td><strong>🏭 Organization</strong></td><td>Hello Bangladeshi</td></tr>
+                <tr><td><strong>🌐 Category</strong></td><td>Education / Quiz / Trivia</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>© 2026 <span class="brand">BH Apps Store</span>. All rights reserved.</p>
+        <p style="margin-top: 4px; font-size: 12px;">
+            <a href="https://bhappsstore.github.io/" target="_blank">BH Apps Store</a> &bull;
+            <a href="mailto:bhappsstore@gmail.com">bhappsstore@gmail.com</a>
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>
