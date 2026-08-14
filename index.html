@@ -1,107 +1,860 @@
-/*! coi-serviceworker v0.1.7 - Guido Zuidhof and contributors, licensed under MIT */
-let coepCredentialless = false;
-if (typeof window === 'undefined') {
-    self.addEventListener("install", () => self.skipWaiting());
-    self.addEventListener("activate", (event) => event.waitUntil(self.clients.claim()));
-
-    self.addEventListener("message", (ev) => {
-        if (!ev.data) {
-            return;
-        } else if (ev.data.type === "deregister") {
-            self.registration
-                .unregister()
-                .then(() => {
-                    return self.clients.matchAll();
-                })
-                .then(clients => {
-                    clients.forEach((client) => client.navigate(client.url));
-                });
-        } else if (ev.data.type === "coepCredentialless") {
-            coepCredentialless = ev.data.value;
-        }
-    });
-
-    self.addEventListener("fetch", function (event) {
-        const r = event.request;
-        if (r.cache === "only-if-cached" && r.mode !== "same-origin") {
-            return;
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>বাংলা বর্ণমালা অডিও এক্সট্র্যাক্টর</title>
+    
+    <!-- Cross-Origin Isolator - SharedArrayBuffer সমস্যার সমাধান -->
+    <script src="coi-serviceworker.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        const request = (coepCredentialless && r.mode === "no-cors") ?
-            new Request(r, {
-                credentials: "omit"
-            }) :
-            r;
-        event.respondWith(
-            fetch(request)
-            .then((response) => {
-                const newResponse = new Response(response.body, response);
-                newResponse.headers.set("Cross-Origin-Embedder-Policy",
-                    coepCredentialless ? "credentialless" : "require-corp"
-                );
-                newResponse.headers.set("Cross-Origin-Opener-Policy", "same-origin");
-                return newResponse;
-            })
-            .catch((e) => console.error(e))
-        );
-    });
-} else {
-    (() => {
-        const reloadedBySelf = window.sessionStorage.getItem("coiReloadedBySelf");
-        window.sessionStorage.removeItem("coiReloadedBySelf");
-        const coepDegrading = (reloadedBySelf == "coepdegrade");
-        if (reloadedBySelf) {
-            const coepCredentialless = (reloadedBySelf == "coepcredentialless");
-            window.coiServiceWorkerDeregister = () => {
-                if (navigator.serviceWorker) {
-                    navigator.serviceWorker.controller.postMessage({
-                        type: "deregister"
-                    });
+        body {
+            font-family: 'Segoe UI', Tahoma, 'Noto Sans Bengali', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            color: #aaa;
+            font-size: 1.1em;
+        }
+
+        .upload-section {
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 50px 30px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.03);
+            margin-bottom: 30px;
+            transition: all 0.4s;
+            cursor: pointer;
+        }
+
+        .upload-section:hover {
+            border-color: #f7971e;
+            background: rgba(255, 255, 255, 0.06);
+            transform: scale(1.01);
+        }
+
+        .upload-section input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .upload-label {
+            display: inline-block;
+            padding: 15px 45px;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            color: #1a1a2e;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 700;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none;
+        }
+
+        .upload-label:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(247, 151, 30, 0.3);
+        }
+
+        .file-info {
+            margin-top: 20px;
+            color: #ffd200;
+            font-weight: 500;
+            font-size: 1.05em;
+        }
+
+        .file-info .file-size {
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: #aaa;
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        .progress-section {
+            margin: 25px 0;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f7971e, #ffd200);
+            transition: width 0.4s ease;
+            width: 0%;
+            border-radius: 20px;
+        }
+
+        .progress-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.95em;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .status-text {
+            text-align: center;
+            margin-top: 12px;
+            color: #ccc;
+            font-weight: 500;
+            min-height: 30px;
+        }
+
+        .segments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+            max-height: 450px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .segments-grid::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .segments-grid::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .segments-grid::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            border-radius: 10px;
+        }
+
+        .segment-item {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 10px 12px;
+            border-radius: 10px;
+            border-left: 4px solid #f7971e;
+            font-size: 0.9em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .segment-item.done {
+            border-left-color: #4caf50;
+            background: rgba(76, 175, 80, 0.15);
+        }
+
+        .segment-item.error {
+            border-left-color: #f44336;
+            background: rgba(244, 67, 54, 0.15);
+        }
+
+        .segment-item .status-icon {
+            font-size: 1.1em;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 14px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #1a1a2e;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(247, 151, 30, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4caf50, #8bc34a);
+            color: #fff;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-success.hidden {
+            display: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336, #e91e63);
+            color: #fff;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 35px rgba(244, 67, 54, 0.4);
+        }
+
+        .message {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            display: none;
+            font-weight: 500;
+        }
+
+        .message-error {
+            background: rgba(244, 67, 54, 0.15);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #ff8a80;
+        }
+
+        .message-success {
+            background: rgba(76, 175, 80, 0.15);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #81c784;
+        }
+
+        .message-info {
+            background: rgba(33, 150, 243, 0.15);
+            border: 1px solid rgba(33, 150, 243, 0.3);
+            color: #64b5f6;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.85em;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 20px;
+        }
+
+        .footer a {
+            color: #ffd200;
+            text-decoration: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-top-color: #ffd200;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 1.6em;
+            }
+            .segments-grid {
+                grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            }
+            .btn {
+                padding: 12px 25px;
+                font-size: 0.9em;
+            }
+            .upload-section {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎵 বাংলা বর্ণমালা অডিও এক্সট্র্যাক্টর</h1>
+            <p class="subtitle">ভিডিও আপলোড করুন, প্রতিটি বর্ণের জন্য আলাদা MP3 ফাইল তৈরি করুন</p>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section" id="uploadSection">
+            <span class="upload-icon">📁</span>
+            <input type="file" id="videoInput" accept="video/*">
+            <label for="videoInput" class="upload-label">ভিডিও ফাইল নির্বাচন করুন</label>
+            <div class="file-info" id="fileInfo">
+                <span style="color:#888;">কোনো ফাইল নির্বাচিত হয়নি</span>
+            </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="message message-error" id="errorMessage"></div>
+        <div class="message message-success" id="successMessage"></div>
+        <div class="message message-info" id="infoMessage"></div>
+
+        <!-- Control Section -->
+        <div id="controlSection" class="hidden">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalSegments">৩৫</div>
+                    <div class="stat-label">মোট সেগমেন্ট</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="processedSegments">০</div>
+                    <div class="stat-label">প্রসেস করা হয়েছে</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="statusEmoji">⏳</div>
+                    <div class="stat-label">স্ট্যাটাস</div>
+                </div>
+            </div>
+
+            <div class="progress-section" id="progressSection">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                    <div class="progress-text" id="progressText">০%</div>
+                </div>
+                <div class="status-text" id="statusText">অপেক্ষা করছি...</div>
+            </div>
+
+            <div class="segments-grid" id="segmentsGrid"></div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" id="startBtn">▶ প্রসেস শুরু করুন</button>
+                <button class="btn btn-success hidden" id="downloadBtn">📥 সব MP3 ডাউনলোড করুন</button>
+                <button class="btn btn-danger" id="resetBtn">🔄 রিসেট</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            ⚡ সব প্রক্রিয়াকরণ আপনার ব্রাউজারে হয়। কোনো ফাইল সার্ভারে আপলোড হয় না।<br>
+            🚀 <a href="#" onclick="location.reload()">পেজ রিফ্রেশ</a> • 
+            💡 <span style="color:#888;">FFmpeg.wasm দিয়ে তৈরি</span>
+        </div>
+    </div>
+
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js">
+    </script>
+
+    <script>
+        // ======================
+        // আপনার টাইমস্ট্যাম্প
+        // ======================
+        const segments = [
+            { name: 'আ', start: '00:00:00', end: '00:00:01' },
+            { name: 'ই', start: '00:00:01', end: '00:00:03' },
+            { name: 'উ', start: '00:00:03', end: '00:00:05' },
+            { name: 'এ', start: '00:00:05', end: '00:00:06' },
+            { name: 'ও', start: '00:00:06', end: '00:00:08' },
+            { name: 'ক', start: '00:00:08', end: '00:00:10' },
+            { name: 'খ', start: '00:00:10', end: '00:00:11' },
+            { name: 'গ', start: '00:00:11', end: '00:00:13' },
+            { name: 'ঘ', start: '00:00:13', end: '00:00:14' },
+            { name: 'ঙ', start: '00:00:14', end: '00:00:15' },
+            { name: 'চ', start: '00:00:15', end: '00:00:17' },
+            { name: 'ছ', start: '00:00:17', end: '00:00:18' },
+            { name: 'জ', start: '00:00:18', end: '00:00:20' },
+            { name: 'ঝ', start: '00:00:20', end: '00:00:22' },
+            { name: 'ঞ', start: '00:00:22', end: '00:00:25' },
+            { name: 'ট', start: '00:00:25', end: '00:00:26' },
+            { name: 'ঠ', start: '00:00:26', end: '00:00:28' },
+            { name: 'ড', start: '00:00:28', end: '00:00:30' },
+            { name: 'ঢ', start: '00:00:30', end: '00:00:31' },
+            { name: 'ণ', start: '00:00:31', end: '00:00:33' },
+            { name: 'ত', start: '00:00:33', end: '00:00:35' },
+            { name: 'থ', start: '00:00:35', end: '00:00:36' },
+            { name: 'দ', start: '00:00:36', end: '00:00:39' },
+            { name: 'ধ', start: '00:00:39', end: '00:00:40' },
+            { name: 'ন', start: '00:00:40', end: '00:00:41' },
+            { name: 'প', start: '00:00:41', end: '00:00:43' },
+            { name: 'ফ', start: '00:00:43', end: '00:00:44' },
+            { name: 'ব', start: '00:00:44', end: '00:00:46' },
+            { name: 'ভ', start: '00:00:46', end: '00:00:49' },
+            { name: 'ম', start: '00:00:49', end: '00:00:51' }
+        ];
+
+        // ======================
+        // স্টেট ম্যানেজমেন্ট
+        // ======================
+        let ffmpeg = null;
+        let isProcessing = false;
+        let processedFiles = [];
+        let videoFile = null;
+        let isFFmpegLoaded = false;
+
+        // ======================
+        // DOM রেফারেন্স
+        // ======================
+        const videoInput = document.getElementById('videoInput');
+        const fileInfo = document.getElementById('fileInfo');
+        const controlSection = document.getElementById('controlSection');
+        const segmentsGrid = document.getElementById('segmentsGrid');
+        const startBtn = document.getElementById('startBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const statusText = document.getElementById('statusText');
+        const progressSection = document.getElementById('progressSection');
+        const errorMsg = document.getElementById('errorMessage');
+        const successMsg = document.getElementById('successMessage');
+        const infoMsg = document.getElementById('infoMessage');
+        const totalSegmentsEl = document.getElementById('totalSegments');
+        const processedSegmentsEl = document.getElementById('processedSegments');
+        const statusEmoji = document.getElementById('statusEmoji');
+        const uploadSection = document.getElementById('uploadSection');
+
+        // ======================
+        // হেল্পার ফাংশন
+        // ======================
+        function hideMessages() {
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+            infoMsg.style.display = 'none';
+        }
+
+        function showError(text) {
+            errorMsg.textContent = text;
+            errorMsg.style.display = 'block';
+            successMsg.style.display = 'none';
+            infoMsg.style.display = 'none';
+        }
+
+        function showSuccess(text) {
+            successMsg.textContent = text;
+            successMsg.style.display = 'block';
+            errorMsg.style.display = 'none';
+            infoMsg.style.display = 'none';
+        }
+
+        function showInfo(text) {
+            infoMsg.textContent = text;
+            infoMsg.style.display = 'block';
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+        }
+
+        function renderSegments() {
+            segmentsGrid.innerHTML = '';
+            segments.forEach((seg, index) => {
+                const div = document.createElement('div');
+                div.className = 'segment-item';
+                div.id = `segment-${index}`;
+                div.innerHTML = `
+                    <span>${seg.name}</span>
+                    <span class="status-icon">⏳</span>
+                `;
+                segmentsGrid.appendChild(div);
+            });
+            totalSegmentsEl.textContent = segments.length;
+            updateProgress(0);
+        }
+
+        function updateProgress(count) {
+            const percent = Math.min(Math.round((count / segments.length) * 100), 100);
+            progressFill.style.width = percent + '%';
+            progressText.textContent = percent + '%';
+            processedSegmentsEl.textContent = count;
+        }
+
+        function updateSegmentStatus(index, status) {
+            const el = document.getElementById(`segment-${index}`);
+            if (el) {
+                const icon = el.querySelector('.status-icon');
+                el.className = 'segment-item';
+                if (status === 'done') {
+                    el.classList.add('done');
+                    icon.textContent = '✅';
+                } else if (status === 'processing') {
+                    icon.textContent = '🔄';
+                } else if (status === 'error') {
+                    el.classList.add('error');
+                    icon.textContent = '❌';
+                } else {
+                    icon.textContent = '⏳';
                 }
-            };
-            window.coiServiceWorkerDeregister();
-            return;
+            }
         }
-        if (!window.crossOriginIsolated && !coepDegrading) {
-            let coepCredentialless = false;
-            navigator.serviceWorker.register(window.document.currentScript.src)
-                .then((registration) => {
-                    return new Promise((resolve, reject) => {
-                        const channel = new MessageChannel();
-                        channel.port1.onmessage = (ev) => {
-                            if (ev.data && ev.data.type === "coepCredentialless") {
-                                coepCredentialless = ev.data.value;
-                            }
-                            resolve(registration);
-                        };
-                        navigator.serviceWorker.controller.postMessage({
-                            type: "coepCredentialless",
-                            value: coepCredentialless
-                        }, [channel.port2]);
+
+        // ======================
+        // FFmpeg লোড
+        // ======================
+        async function loadFFmpeg() {
+            try {
+                showInfo('⏳ FFmpeg লোড হচ্ছে... ইন্টারনেট কানেকশন চেক করুন।');
+                statusText.textContent = '⏳ FFmpeg লোড হচ্ছে...';
+                progressSection.style.display = 'block';
+
+                const { createFFmpeg, fetchFile } = FFmpeg;
+
+                ffmpeg = createFFmpeg({
+                    log: true,
+                    corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+                });
+
+                await ffmpeg.load();
+                isFFmpegLoaded = true;
+                statusText.textContent = '✅ FFmpeg সফলভাবে লোড হয়েছে!';
+                showSuccess('✅ FFmpeg সফলভাবে লোড হয়েছে!');
+                return true;
+            } catch (err) {
+                console.error('FFmpeg load error:', err);
+                
+                // ব্যাকআপ: পুরোনো ভার্সন
+                try {
+                    showInfo('⏳ বিকল্প পদ্ধতিতে FFmpeg লোড হচ্ছে...');
+                    const { createFFmpeg, fetchFile } = FFmpeg;
+                    ffmpeg = createFFmpeg({
+                        log: true,
+                        corePath: 'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js',
                     });
-                })
-                .then((registration) => {
-                    return Promise.all([
-                        registration.update(),
-                        new Promise((resolve) => {
-                            if (navigator.serviceWorker.controller) {
-                                resolve();
-                            } else {
-                                navigator.serviceWorker.addEventListener("controllerchange", () => {
-                                    resolve();
-                                }, { once: true });
-                            }
-                        })
-                    ]);
-                })
-                .then(() => {
-                    const reloadedBySelf = window.sessionStorage.getItem("coiReloadedBySelf");
-                    window.sessionStorage.setItem("coiReloadedBySelf",
-                        coepCredentialless ? "coepcredentialless" : "coepdegrade"
-                    );
-                    window.location.reload();
-                })
-                .catch((e) => console.error("COOP/COEP Service Worker failed to install:", e));
+                    await ffmpeg.load();
+                    isFFmpegLoaded = true;
+                    statusText.textContent = '✅ FFmpeg সফলভাবে লোড হয়েছে!';
+                    showSuccess('✅ FFmpeg সফলভাবে লোড হয়েছে!');
+                    return true;
+                } catch (err2) {
+                    console.error('Backup FFmpeg load error:', err2);
+                    showError('❌ FFmpeg লোড করতে ব্যর্থ।\n\nসম্ভাব্য কারণ:\n1. ইন্টারনেট কানেকশন নেই\n2. GitHub Pages-এ coi-serviceworker কাজ করছে না\n\n💡 সমাধান: পেজ রিফ্রেশ করুন অথবা Chrome ব্রাউজার ব্যবহার করুন।');
+                    statusText.textContent = '❌ FFmpeg লোড করতে ব্যর্থ';
+                    return false;
+                }
+            }
         }
-    })();
-}
+
+        // ======================
+        // ইভেন্ট হ্যান্ডলার
+        // ======================
+        videoInput.addEventListener('change', async function(e) {
+            const file = this.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('video/')) {
+                showError('❌ দয়া করে একটি ভিডিও ফাইল নির্বাচন করুন।');
+                return;
+            }
+
+            videoFile = file;
+            const sizeMB = (file.size / 1024 / 1024).toFixed(2);
+            fileInfo.innerHTML = `
+                ✅ ${file.name} <span class="file-size">(${sizeMB} MB)</span>
+            `;
+            hideMessages();
+            controlSection.classList.remove('hidden');
+            renderSegments();
+            downloadBtn.classList.add('hidden');
+            processedFiles = [];
+            statusEmoji.textContent = '⏳';
+            statusText.textContent = 'FFmpeg লোড হচ্ছে...';
+            startBtn.disabled = true;
+            progressSection.style.display = 'block';
+
+            // FFmpeg লোড
+            const loaded = await loadFFmpeg();
+            if (loaded) {
+                startBtn.disabled = false;
+                statusText.textContent = '✅ প্রসেস করার জন্য প্রস্তুত';
+                statusEmoji.textContent = '✅';
+            }
+        });
+
+        // ======================
+        // প্রসেস শুরু
+        // ======================
+        startBtn.addEventListener('click', async function() {
+            if (isProcessing) return;
+            if (!videoFile) {
+                showError('❌ দয়া করে প্রথমে একটি ভিডিও ফাইল নির্বাচন করুন।');
+                return;
+            }
+
+            if (!isFFmpegLoaded || !ffmpeg || !ffmpeg.isLoaded()) {
+                statusText.textContent = '⏳ FFmpeg লোড হচ্ছে...';
+                const loaded = await loadFFmpeg();
+                if (!loaded) {
+                    showError('❌ FFmpeg লোড না হওয়ায় প্রসেস করা সম্ভব নয়।');
+                    return;
+                }
+            }
+
+            isProcessing = true;
+            startBtn.disabled = true;
+            downloadBtn.classList.add('hidden');
+            processedFiles = [];
+            hideMessages();
+            statusEmoji.textContent = '🔄';
+            statusText.textContent = '⏳ প্রসেস শুরু হচ্ছে...';
+            showInfo('⏳ ভিডিও প্রসেস করা হচ্ছে... দয়া করে অপেক্ষা করুন।');
+
+            try {
+                const { fetchFile } = FFmpeg;
+
+                // ভিডিও লোড
+                statusText.textContent = '📥 ভিডিও ফাইল লোড হচ্ছে...';
+                ffmpeg.FS('writeFile', 'input.mp4', await fetchFile(videoFile));
+
+                let successCount = 0;
+
+                for (let i = 0; i < segments.length; i++) {
+                    const seg = segments[i];
+                    const safeName = `seg_${String(i+1).padStart(2, '0')}.mp3`;
+
+                    updateSegmentStatus(i, 'processing');
+                    statusText.textContent = `🎵 ${seg.name} (${i+1}/${segments.length})`;
+                    updateProgress(i);
+
+                    try {
+                        await ffmpeg.run(
+                            '-i', 'input.mp4',
+                            '-ss', seg.start,
+                            '-to', seg.end,
+                            '-q:a', '0',
+                            '-map', 'a',
+                            '-y',
+                            safeName
+                        );
+
+                        const data = ffmpeg.FS('readFile', safeName);
+                        const blob = new Blob([data.buffer], { type: 'audio/mpeg' });
+
+                        processedFiles.push({
+                            name: `${seg.name}.mp3`,
+                            blob: blob
+                        });
+
+                        updateSegmentStatus(i, 'done');
+                        successCount++;
+                        statusEmoji.textContent = `✅ ${successCount}/${segments.length}`;
+
+                        ffmpeg.FS('unlink', safeName);
+
+                    } catch (err) {
+                        console.error(`Segment ${i} error:`, err);
+                        updateSegmentStatus(i, 'error');
+                        statusText.textContent = `❌ ${seg.name} প্রসেস করতে ব্যর্থ`;
+                    }
+                }
+
+                updateProgress(successCount);
+                statusEmoji.textContent = successCount === segments.length ? '✅' : '⚠️';
+                statusText.textContent = successCount === segments.length ?
+                    '✅ সব সেগমেন্ট সফলভাবে প্রসেস হয়েছে!' :
+                    `⚠️ ${successCount}/${segments.length} সেগমেন্ট সফল হয়েছে`;
+
+                if (successCount > 0) {
+                    downloadBtn.classList.remove('hidden');
+                    showSuccess(`✅ ${successCount}টি MP3 ফাইল তৈরি হয়েছে!`);
+                } else {
+                    showError('❌ কোনো ফাইল তৈরি হয়নি। ভিডিওতে অডিও ট্র্যাক আছে কিনা চেক করুন।');
+                }
+
+            } catch (err) {
+                console.error('Process error:', err);
+                showError('❌ প্রসেসিং এ সমস্যা: ' + err.message);
+                statusText.textContent = '❌ প্রসেসিং ব্যর্থ';
+            } finally {
+                isProcessing = false;
+                startBtn.disabled = false;
+                try {
+                    ffmpeg.FS('unlink', 'input.mp4');
+                } catch (e) {}
+            }
+        });
+
+        // ======================
+        // ডাউনলোড
+        // ======================
+        downloadBtn.addEventListener('click', async function() {
+            if (processedFiles.length === 0) {
+                showError('❌ ডাউনলোড করার মতো কোনো ফাইল নেই।');
+                return;
+            }
+
+            try {
+                showInfo('📦 ZIP ফাইল তৈরি হচ্ছে...');
+                const zip = new JSZip();
+                const folder = zip.folder('বাংলা_বর্ণমালা_MP3');
+
+                processedFiles.forEach(file => {
+                    folder.file(file.name, file.blob);
+                });
+
+                const zipBlob = await zip.generateAsync({ 
+                    type: 'blob',
+                    compression: 'DEFLATE',
+                    compressionOptions: { level: 6 }
+                });
+                
+                saveAs(zipBlob, 'বাংলা_বর্ণমালা_MP3.zip');
+                showSuccess('✅ ZIP ফাইল ডাউনলোড শুরু হয়েছে!');
+            } catch (err) {
+                showError('❌ ZIP তৈরি করতে সমস্যা: ' + err.message);
+            }
+        });
+
+        // ======================
+        // রিসেট
+        // ======================
+        resetBtn.addEventListener('click', function() {
+            if (isProcessing) {
+                showError('⚠️ প্রসেস চলাকালীন রিসেট করা সম্ভব নয়।');
+                return;
+            }
+            videoInput.value = '';
+            fileInfo.innerHTML = '<span style="color:#888;">কোনো ফাইল নির্বাচিত হয়নি</span>';
+            controlSection.classList.add('hidden');
+            processedFiles = [];
+            videoFile = null;
+            hideMessages();
+            statusEmoji.textContent = '⏳';
+            if (ffmpeg && ffmpeg.isLoaded()) {
+                try {
+                    ffmpeg.FS('unlink', 'input.mp4');
+                } catch (e) {}
+            }
+            startBtn.disabled = true;
+            downloadBtn.classList.add('hidden');
+            progressSection.style.display = 'none';
+        });
+
+        // ======================
+        // ড্র্যাগ অ্যান্ড ড্রপ সাপোর্ট
+        // ======================
+        uploadSection.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadSection.style.borderColor = '#ffd200';
+            uploadSection.style.background = 'rgba(255,215,0,0.1)';
+        });
+
+        uploadSection.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            uploadSection.style.borderColor = 'rgba(255,255,255,0.2)';
+            uploadSection.style.background = 'rgba(255,255,255,0.03)';
+        });
+
+        uploadSection.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadSection.style.borderColor = 'rgba(255,255,255,0.2)';
+            uploadSection.style.background = 'rgba(255,255,255,0.03)';
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                videoInput.files = files;
+                videoInput.dispatchEvent(new Event('change'));
+            }
+        });
+
+        // ======================
+        // ইনিশিয়ালাইজ
+        // ======================
+        renderSegments();
+        startBtn.disabled = true;
+        console.log('🎵 বাংলা বর্ণমালা অডিও এক্সট্র্যাক্টর লোড হয়েছে!');
+        console.log(`📝 ${segments.length}টি সেগমেন্ট প্রস্তুত`);
+        console.log('💡 GitHub Pages-এ coi-serviceworker সক্রিয় আছে কিনা চেক করুন।');
+    </script>
+</body>
+</html>
