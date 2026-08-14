@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>বাংলা বর্ণমালা অডিও এক্সট্র্যাক্টর</title>
     
-    <!-- Cross-Origin Isolator - SharedArrayBuffer সমস্যার সমাধান -->
-    <script src="coi-serviceworker.js"></script>
+    <!-- Cross-Origin Isolator - SharedArrayBuffer সমস্যার সমাধান (CDN থেকে) -->
+    <script src="https://cdn.jsdelivr.net/npm/coi-serviceworker@0.1.7/coi-serviceworker.min.js"></script>
     
     <style>
+        /* CSS ঠিক আগের মতোই থাকবে */
         * {
             margin: 0;
             padding: 0;
@@ -376,7 +377,6 @@
             <p class="subtitle">ভিডিও আপলোড করুন, প্রতিটি বর্ণের জন্য আলাদা MP3 ফাইল তৈরি করুন</p>
         </div>
 
-        <!-- Upload Section -->
         <div class="upload-section" id="uploadSection">
             <span class="upload-icon">📁</span>
             <input type="file" id="videoInput" accept="video/*">
@@ -386,12 +386,10 @@
             </div>
         </div>
 
-        <!-- Messages -->
         <div class="message message-error" id="errorMessage"></div>
         <div class="message message-success" id="successMessage"></div>
         <div class="message message-info" id="infoMessage"></div>
 
-        <!-- Control Section -->
         <div id="controlSection" class="hidden">
             <div class="stats-grid">
                 <div class="stat-item">
@@ -581,16 +579,25 @@
         }
 
         // ======================
-        // FFmpeg লোড
+        // FFmpeg লোড - উন্নত ভার্সন
         // ======================
         async function loadFFmpeg() {
             try {
-                showInfo('⏳ FFmpeg লোড হচ্ছে... ইন্টারনেট কানেকশন চেক করুন।');
+                // Cross-Origin Isolation চেক
+                if (!window.crossOriginIsolated) {
+                    showInfo(`⚠️ Cross-Origin Isolation সক্রিয় নয়। 
+                    
+💡 সমাধান: পেজটি ২ বার রিফ্রেশ করুন (F5) অথবা Chrome ব্রাউজার ব্যবহার করুন।`);
+                    statusText.textContent = '⚠️ Cross-Origin Isolation প্রয়োজন';
+                }
+
+                showInfo('⏳ FFmpeg লোড হচ্ছে... (৩০-৬০ সেকেন্ড সময় লাগতে পারে)');
                 statusText.textContent = '⏳ FFmpeg লোড হচ্ছে...';
                 progressSection.style.display = 'block';
 
                 const { createFFmpeg, fetchFile } = FFmpeg;
 
+                // SIMD ভার্সন (দ্রুত)
                 ffmpeg = createFFmpeg({
                     log: true,
                     corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
@@ -604,7 +611,7 @@
             } catch (err) {
                 console.error('FFmpeg load error:', err);
                 
-                // ব্যাকআপ: পুরোনো ভার্সন
+                // ব্যাকআপ: Single-threaded ভার্সন
                 try {
                     showInfo('⏳ বিকল্প পদ্ধতিতে FFmpeg লোড হচ্ছে...');
                     const { createFFmpeg, fetchFile } = FFmpeg;
@@ -619,7 +626,18 @@
                     return true;
                 } catch (err2) {
                     console.error('Backup FFmpeg load error:', err2);
-                    showError('❌ FFmpeg লোড করতে ব্যর্থ।\n\nসম্ভাব্য কারণ:\n1. ইন্টারনেট কানেকশন নেই\n2. GitHub Pages-এ coi-serviceworker কাজ করছে না\n\n💡 সমাধান: পেজ রিফ্রেশ করুন অথবা Chrome ব্রাউজার ব্যবহার করুন।');
+                    showError(`❌ FFmpeg লোড করতে ব্যর্থ।
+
+সম্ভাব্য কারণ:
+1. ইন্টারনেট কানেকশন নেই
+2. GitHub Pages-এ Cross-Origin Isolation কাজ করছে না
+
+💡 সমাধান:
+1. পেজটি ২ বার রিফ্রেশ করুন (F5)
+2. Chrome ব্রাউজার ব্যবহার করুন
+3. এড্রেস বারে যান: chrome://flags/
+   → "SharedArrayBuffer" Enabled করুন
+   → ব্রাউজার রিস্টার্ট করুন`);
                     statusText.textContent = '❌ FFmpeg লোড করতে ব্যর্থ';
                     return false;
                 }
@@ -848,13 +866,27 @@
         });
 
         // ======================
+        // পেজ লোড হলে চেক
+        // ======================
+        window.addEventListener('load', function() {
+            if (window.crossOriginIsolated) {
+                console.log('✅ Cross-Origin Isolated: YES');
+                showInfo('✅ Cross-Origin Isolation সক্রিয়! FFmpeg কাজ করবে।');
+            } else {
+                console.warn('⚠️ Cross-Origin Isolated: NO');
+                showInfo(`⚠️ Cross-Origin Isolation সক্রিয় নয়।
+
+💡 সমাধান: পেজটি ২ বার রিফ্রেশ করুন (F5)`);
+            }
+        });
+
+        // ======================
         // ইনিশিয়ালাইজ
         // ======================
         renderSegments();
         startBtn.disabled = true;
         console.log('🎵 বাংলা বর্ণমালা অডিও এক্সট্র্যাক্টর লোড হয়েছে!');
         console.log(`📝 ${segments.length}টি সেগমেন্ট প্রস্তুত`);
-        console.log('💡 GitHub Pages-এ coi-serviceworker সক্রিয় আছে কিনা চেক করুন।');
     </script>
 </body>
 </html>
